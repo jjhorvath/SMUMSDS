@@ -1,0 +1,57 @@
+---
+title: "DDSHW5"
+author: "Julius Horvath"
+date: "September 25, 2018"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Question 1
+a. Importing the txt file and assigning to a dataframe with three columns
+```{r q1a}
+df<-read.delim(file = "yob2016.txt", header=FALSE, sep = ";")
+names(df)<-c("FirstName", "Gender","AmountofChildren")
+
+```
+b. Display the summary and structure of df
+```{r q1b}
+str(df)
+head(df)
+summary(df)
+```
+c. Find the misspelled name with three y's at the end.
+```{r q1c}
+misspelled<-df$FirstName[grep(x=df$FirstName, pattern = ".y{3}$")]  
+misspelled #I find the incorrect name is Fionayyy
+```
+d. Remove the name and save remained as y2016
+```{r q1d}
+y2016<-df[-212]
+```
+
+# Question 2
+a. Import the txt file. assign to y2015
+```{r q2a}
+y2015<-read.csv(file="yob2015.txt", header=FALSE)
+names(y2015)<-c("FirstName", "Gender","AmountofChildren")
+```
+b. Display the last ten rows. Describe something interesting
+answer - I find it amazing that all the names are male, have the same count of five, and all begin with Z.  
+```{r q2b}
+tail(y2015, 10)
+```
+c and d. Merge y2016 and y2015 by Name, assign to final.
+I created the merged dataframe, then drop the separate counts from 2015 and 2016
+```{r q2c}
+final<-merge(x=y2015, y=y2016, by=c("FirstName", "Gender"))
+final$Total<-(final$AmountofChildren.x)+(final$AmountofChildren.y)  #creating a total column 
+final$AmountofChildren.y<-NULL     #dropping the extra columns
+final$AmountofChildren.x<-NULL
+sortednames<-final[order(final$Total, decreasing=TRUE),]
+head(sortednames$FirstName, 10)
+sortedfemalenames <- final[which(final$Gender=='F'),]
+sortedfemalenames<-sortedfemalenames[order(sortedfemalenames$Total, decreasing=TRUE),]
+head(sortedfemalenames$FirstName, 10)
+write.csv(x=c("sortedfemalenames$FirstName","sortedfemailnames$Total"), file="top10names.txt")
+```

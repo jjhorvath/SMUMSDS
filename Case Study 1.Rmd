@@ -1,0 +1,71 @@
+---
+title: "DDSCaseStudy1"
+authors: "Julius Horvath and Stacey Smith"
+date: "September 30, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+breweries<-read.csv(file="Breweries.csv")
+beers<-read.csv(file="Beers.csv")
+```
+
+## Brewery count by state, in decreasing order
+
+```{r}
+sort(table(breweries$State), decreasing = TRUE)
+```
+
+## A sample of the dataset used in our analysis
+
+```{r}
+breweries$Brewery_id<-breweries$Brew_ID
+breweries<-breweries[,-1]
+BreweriesAndBeers<-merge(breweries, beers, by="Brewery_id")
+BreweriesAndBeers$BreweryName<-BreweriesAndBeers$Name.x
+BreweriesAndBeers$BeerName<-BreweriesAndBeers$Name.y
+BreweriesAndBeers<-BreweriesAndBeers[,c(-2, -5)]
+head(BreweriesAndBeers, 6)
+```
+
+## There were a number of missing values in each column. Below is a summary of each column name and the number of missing items in each column.
+```{r}
+for(i in 1:10){
+     print(names(BreweriesAndBeers[i]))
+     print(sum(is.na(BreweriesAndBeers[,i])))
+}
+```
+
+## Median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
+
+```{r}
+sort(tapply(BreweriesAndBeers$ABV, BreweriesAndBeers$State, median, na.rm=TRUE), decreasing=TRUE)
+sort(tapply(BreweriesAndBeers$IBU, BreweriesAndBeers$State, median, na.rm=TRUE), decreasing=TRUE)
+```
+
+##	The top five states by maximum alcoholic content (ABV) and maximum bitterness (IBU), respectively: 
+```{r}
+head(sort(tapply(BreweriesAndBeers$ABV, BreweriesAndBeers$State, max, na.rm=TRUE), decreasing=TRUE), 5)
+head(sort(tapply(BreweriesAndBeers$IBU, BreweriesAndBeers$State, max, na.rm=TRUE), decreasing=TRUE), 5)
+```
+
+## Our analysis of the ABV for the beers in the dataset:
+```{r}
+summary(beers$ABV)
+boxplot(beers$ABV, main="ABV Summary", col="orange", ylab="ABV", boxwex=.5)
+```
+## There appears to be a relationship between the bitterness of the beer and its alcoholic content as shown in the plot below.
+```{r}
+plot(BreweriesAndBeers$IBU, BreweriesAndBeers$ABV, ylab="ABV", xlab="IBU")
+abline(lm(BreweriesAndBeers$ABV ~ BreweriesAndBeers$IBU), col="red")
+```

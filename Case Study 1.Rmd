@@ -6,8 +6,17 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
+options(width=150) #Added this parameter to prevent rows from wrapping in html
 knitr::opts_chunk$set(echo = TRUE)
+library(sqldf)
 ```
+
+## Increase the width to prevent certain rows from wrapping in html.
+<style>
+    body .main-container {
+        max-width: 1200px;
+    }
+</style>
 
 ## R Markdown
 
@@ -23,7 +32,8 @@ beers<-read.csv(file="Beers.csv")
 ## Brewery count by state, in decreasing order
 
 ```{r}
-sort(table(breweries$State), decreasing = TRUE)
+#sort(table(breweries$State), decreasing = TRUE)
+sqldf("Select count(Brew_ID) as 'Number of Breweries', State from breweries group by State order by count(Brew_ID) desc")
 ```
 
 ## A sample of the dataset used in our analysis
@@ -36,6 +46,7 @@ BreweriesAndBeers$BreweryName<-BreweriesAndBeers$Name.x
 BreweriesAndBeers$BeerName<-BreweriesAndBeers$Name.y
 BreweriesAndBeers<-BreweriesAndBeers[,c(-2, -5)]
 head(BreweriesAndBeers, 6)
+tail(BreweriesAndBeers, 6)
 ```
 
 ## There were a number of missing values in each column. Below is a summary of each column name and the number of missing items in each column.

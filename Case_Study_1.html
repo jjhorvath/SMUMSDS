@@ -226,30 +226,13 @@ head(BreweriesAndBeers, 6)</code></pre>
 </div>
 <div id="there-were-a-number-of-missing-values-in-each-column.-below-is-a-summary-of-each-column-name-and-the-number-of-missing-items-in-each-column." class="section level2">
 <h2>There were a number of missing values in each column. Below is a summary of each column name and the number of missing items in each column.</h2>
-<pre class="r"><code>for(i in 1:10){
-     print(names(BreweriesAndBeers[i]))
-     print(sum(is.na(BreweriesAndBeers[,i])))
-}</code></pre>
-<pre><code>## [1] &quot;Brewery_id&quot;
-## [1] 0
-## [1] &quot;City&quot;
-## [1] 0
-## [1] &quot;State&quot;
-## [1] 0
-## [1] &quot;Beer_ID&quot;
-## [1] 0
-## [1] &quot;ABV&quot;
-## [1] 62
-## [1] &quot;IBU&quot;
-## [1] 1005
-## [1] &quot;Style&quot;
-## [1] 0
-## [1] &quot;Ounces&quot;
-## [1] 0
-## [1] &quot;BreweryName&quot;
-## [1] 0
-## [1] &quot;BeerName&quot;
-## [1] 0</code></pre>
+<pre class="r"><code>#for(i in 1:10){
+#     print(names(BreweriesAndBeers[i]))
+#     print(sum(is.na(BreweriesAndBeers[,i])))
+#}
+sapply(BreweriesAndBeers, function(x) sum(is.na(x)))</code></pre>
+<pre><code>##  Brewery_id        City       State     Beer_ID         ABV         IBU       Style      Ounces BreweryName    BeerName 
+##           0           0           0           0          62        1005           0           0           0           0</code></pre>
 </div>
 <div id="median-alcohol-content-and-international-bitterness-unit-for-each-state.-plot-a-bar-chart-to-compare." class="section level2">
 <h2>Median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.</h2>

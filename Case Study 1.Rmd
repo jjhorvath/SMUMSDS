@@ -61,8 +61,15 @@ sapply(BreweriesAndBeers, function(x) sum(is.na(x)))
 ## Median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
 
 ```{r}
-sort(tapply(BreweriesAndBeers$ABV, BreweriesAndBeers$State, median, na.rm=TRUE), decreasing=TRUE)
-sort(tapply(BreweriesAndBeers$IBU, BreweriesAndBeers$State, median, na.rm=TRUE), decreasing=TRUE)
+medabv<-sort(tapply(BreweriesAndBeers$ABV, BreweriesAndBeers$State, median, na.rm=TRUE), decreasing=TRUE)
+medibu<-sort(tapply(BreweriesAndBeers$IBU, BreweriesAndBeers$State, median, na.rm=TRUE), decreasing=TRUE)
+medabv
+medibu
+medabvdf<-as.data.frame(medabv)
+medibudf<-as.data.frame(medibu)
+mergedibuabv<-merge(medabvdf, medibudf,by="row.names")
+barplot(mergedibuabv$medabv, names.arg=mergedibuabv$Row.names, las=2, cex.names=0.5, border=NA, main="Median ABV by state", ylab="Alcohol by Volume", xlab="State Abbreviation")
+barplot(mergedibuabv$medibu, names.arg=mergedibuabv$Row.names, las=2, cex.names=0.5, border=NA, main="Median IBU by state", ylab="International Bitterness Units", xlab="State Abbreviation")
 ```
 
 ##	The top five states by maximum alcoholic content (ABV) and maximum bitterness (IBU), respectively: 

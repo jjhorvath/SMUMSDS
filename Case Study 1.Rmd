@@ -9,6 +9,8 @@ output: html_document
 options(width=150) #Added this parameter to prevent rows from wrapping in html
 knitr::opts_chunk$set(echo = TRUE)
 library(sqldf)
+library(knitr)
+library(kableExtra)
 ```
 
 ## Increase the width to prevent certain rows from wrapping in html.
@@ -32,22 +34,29 @@ beers<-read.csv(file="Beers.csv")
 ## Brewery count by state, in decreasing order
 
 ```{r}
-#sort(table(breweries$State), decreasing = TRUE)
-sqldf("Select count(Brew_ID) as 'Number of Breweries', State from breweries group by State order by count(Brew_ID) desc")
+#kable(sort(table(breweries$State), decreasing = TRUE)) %>%
+ #kable_styling(bootstrap_options = c("striped", "hover"))
+kable(sqldf("Select count(Brew_ID) as 'Number of Breweries', State from breweries group by State order by count(Brew_ID) desc")) %>%
+  kable_styling(bootstrap_options = c("striped", "hover","condensed"),full_width = FALSE)
+ 
 ```
 
 ## A sample of the dataset used in our analysis
 
-```{r}
+```{r }
 breweries$Brewery_id<-breweries$Brew_ID
 breweries<-breweries[,-1]
 BreweriesAndBeers<-merge(breweries, beers, by="Brewery_id")
 BreweriesAndBeers$BreweryName<-BreweriesAndBeers$Name.x
 BreweriesAndBeers$BeerName<-BreweriesAndBeers$Name.y
 BreweriesAndBeers<-BreweriesAndBeers[,c(-2, -5)]
-head(BreweriesAndBeers, 6)
-tail(BreweriesAndBeers, 6)
-```
+kable(head(BreweriesAndBeers, 6)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+kable(tail(BreweriesAndBeers, 6)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+kable(tail(BreweriesAndBeers, 6)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"))
+  ```
 
 ## There were a number of missing values in each column. Below is a summary of each column name and the number of missing items in each column.
 ```{r}
@@ -55,7 +64,8 @@ tail(BreweriesAndBeers, 6)
 #     print(names(BreweriesAndBeers[i]))
 #     print(sum(is.na(BreweriesAndBeers[,i])))
 #}
-sapply(BreweriesAndBeers, function(x) sum(is.na(x)))
+kable(sapply(BreweriesAndBeers, function(x) sum(is.na(x)))) %>%
+ kable_styling(bootstrap_options = c("striped", "hover"),full_width = FALSE)       
 ```
 
 ## Median alcohol content and international bitterness unit for each state. Plot a bar chart to compare.
@@ -63,8 +73,10 @@ sapply(BreweriesAndBeers, function(x) sum(is.na(x)))
 ```{r}
 medabv<-sort(tapply(BreweriesAndBeers$ABV, BreweriesAndBeers$State, median, na.rm=TRUE), decreasing=TRUE)
 medibu<-sort(tapply(BreweriesAndBeers$IBU, BreweriesAndBeers$State, median, na.rm=TRUE), decreasing=TRUE)
-medabv
-medibu
+kable(medabv) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),full_width = FALSE)
+kable(medibu) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),full_width = FALSE)
 medabvdf<-as.data.frame(medabv)
 medibudf<-as.data.frame(medibu)
 mergedibuabv<-merge(medabvdf, medibudf,by="row.names")
@@ -74,13 +86,19 @@ barplot(mergedibuabv$medibu, names.arg=mergedibuabv$Row.names, las=2, cex.names=
 
 ##	The top five states by maximum alcoholic content (ABV) and maximum bitterness (IBU), respectively: 
 ```{r}
-head(sort(tapply(BreweriesAndBeers$ABV, BreweriesAndBeers$State, max, na.rm=TRUE), decreasing=TRUE), 5)
-head(sort(tapply(BreweriesAndBeers$IBU, BreweriesAndBeers$State, max, na.rm=TRUE), decreasing=TRUE), 5)
+kable(head(sort(tapply(BreweriesAndBeers$ABV, BreweriesAndBeers$State, max, na.rm=TRUE), decreasing=TRUE), 5)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),full_width = FALSE)
+kable(head(sort(tapply(BreweriesAndBeers$IBU, BreweriesAndBeers$State, max, na.rm=TRUE), decreasing=TRUE), 5)) %>%
+  kable_styling(bootstrap_options = c("striped", "hover"),full_width = FALSE)
 ```
 
 ## Our analysis of the ABV for the beers in the dataset:
 ```{r}
 summary(beers$ABV)
+#abv_summary <- summary(beers$ABV)
+#avb_summary
+#kable(abv_summary) %>%
+  #kable_styling(bootstrap_options = c("striped", "hover"),full_width = FALSE)
 boxplot(beers$ABV, main="ABV Summary", col="orange", ylab="ABV", boxwex=.5)
 ```
 ## There appears to be a relationship between the bitterness of the beer and its alcoholic content as shown in the plot below.

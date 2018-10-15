@@ -1,0 +1,29 @@
+---
+title: "CaseStudy1Codebook"
+author: "Julius Horvath"
+date: "October 15, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+> Beers.csv
+
+* Name: The name of the beer
+* Beer_ID: A unique identification number for each beer.
+* ABV: Alcohol by volume, decimal percentage.
+* IBU: International bitterness units.
+* Brewery_id: A unique identification number for the brewery.
+     + Beers.csv and Breweries.csv can be linked by Brewery_ID and Brew_ID, respectively. 
+* Style: The type of beer (ex: "Cider" or "Baltic Porter").
+* Ounces: The volume of beer in U.S. fluid ounces.
+
+> Breweries.csv
+
+* Brew_ID: A unique identification number for the brewery. 
+     + Beers.csv and Breweries.csv can be linked by Brewery_ID and Brew_ID, respectively. 
+* Name: Name of the brewery.
+* City: Name of city in which brewery is located.
+* State: Abbreviated US state where brewery is located.

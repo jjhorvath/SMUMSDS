@@ -80,8 +80,8 @@ kable(medibu) %>%
 medabvdf<-as.data.frame(medabv)
 medibudf<-as.data.frame(medibu)
 mergedibuabv<-merge(medabvdf, medibudf,by="row.names")
-barplot(mergedibuabv$medabv, names.arg=mergedibuabv$Row.names, las=2, cex.names=0.5, border=NA, main="Median ABV by state", ylab="Alcohol by Volume", xlab="State Abbreviation")
-barplot(mergedibuabv$medibu, names.arg=mergedibuabv$Row.names, las=2, cex.names=0.5, border=NA, main="Median IBU by state", ylab="International Bitterness Units", xlab="State Abbreviation")
+barplot(mergedibuabv$medabv, names.arg=mergedibuabv$Row.names, las=2, cex.names=0.5, border=NA, main="Median ABV by state", ylab="Alcohol by Volume", xlab="State Abbreviation",col = rainbow(52))
+barplot(mergedibuabv$medibu, names.arg=mergedibuabv$Row.names, las=2, cex.names=0.5, border=NA, main="Median IBU by state", ylab="International Bitterness Units", xlab="State Abbreviation",col = rainbow(52))
 ```
 
 ##	The top five states by maximum alcoholic content (ABV) and maximum bitterness (IBU), respectively: 
